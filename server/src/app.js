@@ -9,11 +9,10 @@ app.use(morgan('dev'));
 
 //Require all routes
 const authRoute = require('./routes/auth.route');
+const hospitalRoute = require('./routes/hospital.route');
 
 app.use('/api/auth', authRoute)
-
-
-
+app.use('/api/hospitals', hospitalRoute)
 
 
 

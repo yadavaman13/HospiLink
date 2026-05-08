@@ -40,6 +40,28 @@ const hospitalSchema = new mongoose.Schema({
         default: "pending"
     },
 
+    reviewStatus: {
+        type: String,
+        enum: ["pending", "approved", "rejected"],
+        default: "pending"
+    },
+
+    reviewedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: null
+    },
+
+    reviewedAt: {
+        type: Date,
+        default: null
+    },
+
+    reviewNotes: {
+        type: String,
+        default: null
+    },
+
     subscription: {
         plan: {
             type: String,
