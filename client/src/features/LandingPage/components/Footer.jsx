@@ -12,8 +12,8 @@ export function Footer() {
               HospiLink
             </div>
             <p className="footer-brand-desc">
-              The intelligent healthcare network connecting hospitals, doctors, and patients —
-              powered by AI and built for the future of care.
+              The intelligent healthcare network connecting hospitals, doctors, and patients.
+              Powered by AI and built for the future of care.
             </p>
           </div>
           <div>

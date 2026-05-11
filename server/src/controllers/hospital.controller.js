@@ -300,3 +300,31 @@ module.exports = {
     listPendingHospitals,
     updateHospitalAdminPassword
 };
+
+/**
+ * List all approved hospitals (public endpoint for patient booking)
+ * GET /api/hospitals/list
+ */
+async function listApprovedHospitals(req, res) {
+    try {
+        const hospitals = await Hospital.find({ status: 'approved' })
+            .select('hospitalId name address contact departments beds')
+            .lean();
+        
+        return res.status(200).json({ hospitals });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+}
+
+module.exports = {
+    registerHospital,
+    getHospitals,
+    getHospitalById,
+    approveHospital,
+    rejectHospital,
+    suspendHospital,
+    listPendingHospitals,
+    updateHospitalAdminPassword,
+    listApprovedHospitals
+};

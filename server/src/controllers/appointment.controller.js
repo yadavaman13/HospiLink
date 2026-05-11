@@ -28,8 +28,12 @@ async function searchDoctors(req, res) {
         }
 
         const doctors = await User.find(query)
-            .select("profile doctorProfile email")
+            .select("profile doctorProfile email hospitalId")
             .lean();
+
+        // Get hospital info
+        const hospital = await Hospital.findOne({ hospitalId }).select("name address").lean();
+        const hospitalName = hospital?.name || "Unknown Hospital";
 
         const formattedDoctors = doctors.map(doc => ({
             _id: doc._id,
@@ -40,7 +44,9 @@ async function searchDoctors(req, res) {
             rating: doc.doctorProfile?.rating,
             consultationFee: doc.doctorProfile?.consultationFee,
             bio: doc.doctorProfile?.bio,
-            email: doc.email
+            email: doc.email,
+            hospitalId: doc.hospitalId,
+            hospitalName: hospitalName
         }));
 
         return res.status(200).json({
@@ -368,15 +374,27 @@ async function getMyAppointments(req, res) {
             : { patientId: userId };
 
         const appointments = await Appointment.find(query)
-            .populate('doctorId', 'profile email')
+            .populate('doctorId', 'profile email doctorProfile')
             .populate('patientId', 'profile email')
+            .populate('hospitalId', 'name address contact departments beds')
             .sort({ appointmentDate: -1 })
             .lean();
 
+        // Rename priority field to match frontend naming
+        const formattedAppointments = appointments.map(apt => ({
+            ...apt,
+            priority: apt.aiAnalysis ? {
+                level: apt.aiAnalysis.priorityLevel,
+                score: apt.aiAnalysis.priorityScore,
+                reasoning: apt.aiAnalysis.reasoning,
+                riskFactors: apt.aiAnalysis.riskFactors
+            } : null
+        }));
+
         return res.status(200).json({
             message: "Appointments retrieved",
-            count: appointments.length,
-            appointments
+            count: formattedAppointments.length,
+            appointments: formattedAppointments
         });
     } catch (error) {
         return res.status(500).json({ error: error.message });

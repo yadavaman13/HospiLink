@@ -56,6 +56,27 @@ const TESTIMONIALS = [
     initials: 'AD',
     color: '#1a7a8a',
   },
+  {
+    text: 'The seamless integration of emergency requests into my dashboard allows me to prepare for critical cases before they even arrive at the ward.',
+    name: 'Dr. Kabir Singh',
+    role: 'Senior Surgeon, Metro Care',
+    initials: 'KS',
+    color: '#0e7c91',
+  },
+  {
+    text: 'Allocating nurses and managing shifts is incredibly intuitive now. The system automatically highlights understaffed wards based on live patient count.',
+    name: 'Sarah Joseph',
+    role: 'Head Nurse, Sunshine Clinics',
+    initials: 'SJ',
+    color: '#328b9e',
+  },
+  {
+    text: 'With the automated data flow, our monthly billing audits are done in a fraction of the time. The platform is secure, fast, and reliable.',
+    name: 'Vikram Patel',
+    role: 'Financial Officer, HealthNet',
+    initials: 'VP',
+    color: '#074854',
+  },
 ];
 
 function Roles() {
@@ -109,28 +130,46 @@ function Testimonials() {
             Hear from the doctors, administrators, and patients who rely on HospiLink every day.
           </p>
         </div>
-        <div className="testimonials-grid">
-          {TESTIMONIALS.map((t, i) => (
-            <div
-              className="testimonial-card animate-on-scroll"
-              key={t.name}
-              style={{ transitionDelay: `${i * 0.12}s` }}
-            >
-              <div className="testimonial-quote-icon">
-                <Quote size={22} strokeWidth={1.8} color="var(--primary-light)" />
-              </div>
-              <p className="testimonial-text">{t.text}</p>
-              <div className="testimonial-author">
-                <div className="testimonial-avatar" style={{ background: t.color }}>
-                  {t.initials}
+        
+        <div className="testimonials-marquee-wrapper animate-on-scroll">
+          <div className="testimonials-track">
+            {/* First set of cards */}
+            {TESTIMONIALS.map((t, i) => (
+              <div className="testimonial-card" key={`t1-${i}`}>
+                <div className="testimonial-quote-icon">
+                  <Quote size={22} strokeWidth={1.8} color="var(--primary-light)" />
                 </div>
-                <div>
-                  <div className="testimonial-name">{t.name}</div>
-                  <div className="testimonial-role">{t.role}</div>
+                <p className="testimonial-text">{t.text}</p>
+                <div className="testimonial-author">
+                  <div className="testimonial-avatar" style={{ background: t.color }}>
+                    {t.initials}
+                  </div>
+                  <div>
+                    <div className="testimonial-name">{t.name}</div>
+                    <div className="testimonial-role">{t.role}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+            {/* Duplicated set for seamless infinite scroll */}
+            {TESTIMONIALS.map((t, i) => (
+              <div className="testimonial-card" key={`t2-${i}`} aria-hidden="true">
+                <div className="testimonial-quote-icon">
+                  <Quote size={22} strokeWidth={1.8} color="var(--primary-light)" />
+                </div>
+                <p className="testimonial-text">{t.text}</p>
+                <div className="testimonial-author">
+                  <div className="testimonial-avatar" style={{ background: t.color }}>
+                    {t.initials}
+                  </div>
+                  <div>
+                    <div className="testimonial-name">{t.name}</div>
+                    <div className="testimonial-role">{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

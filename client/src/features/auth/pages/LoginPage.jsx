@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import '../styles/auth.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
 /* ─── Left panel feature bullets ─── */
 const FEATURES = [
   {
@@ -57,7 +59,7 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -70,8 +72,8 @@ export default function LoginPage() {
       } else {
         setAlert({ type: 'success', msg: 'Logged in successfully! Redirecting…' });
         // Store token if needed
-        if (data.token) localStorage.setItem('hl_token', data.token);
-        setTimeout(() => navigate('/dashboard'), 1000);
+        if (data.token) localStorage.setItem('token', data.token);
+        setTimeout(() => navigate('/patient/dashboard'), 1000);
       }
     } catch {
       setAlert({ type: 'error', msg: 'Unable to connect to the server. Please try again.' });

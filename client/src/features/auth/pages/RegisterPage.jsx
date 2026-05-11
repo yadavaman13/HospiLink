@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import '../styles/auth.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
 const LEFT_FEATURES = [
   {
     Icon: Brain,
@@ -113,7 +115,7 @@ export default function RegisterPage() {
         ...(form.address    && { address:    form.address }),
       };
 
-      const res  = await fetch('/api/auth/register', {
+      const res  = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -124,9 +126,9 @@ export default function RegisterPage() {
       if (!res.ok) {
         setAlert({ type: 'error', msg: data.message || 'Registration failed. Please try again.' });
       } else {
-        if (data.token) localStorage.setItem('hl_token', data.token);
+        if (data.token) localStorage.setItem('token', data.token);
         setAlert({ type: 'success', msg: 'Account created! Redirecting to your dashboard…' });
-        setTimeout(() => navigate('/dashboard'), 1200);
+        setTimeout(() => navigate('/patient/dashboard'), 1200);
       }
     } catch {
       setAlert({ type: 'error', msg: 'Unable to connect to the server. Please try again.' });
