@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, AlertCircle } from 'lucide-react';
+import { Building2, AlertCircle, Stethoscope } from 'lucide-react';
 import '../styles/appointment-booking.css';
 
 export function BookingOptionSelector({ onSelectOption }) {
@@ -30,7 +30,7 @@ export function BookingOptionSelector({ onSelectOption }) {
           className="option-card option-card-symptoms"
         >
           <div className="option-icon symptoms">
-            <span style={{ fontSize: '28px' }}>🩺</span>
+            <Stethoscope size={40} strokeWidth={1.5} />
           </div>
           <h3>Find Doctor by Symptoms</h3>
           <p>

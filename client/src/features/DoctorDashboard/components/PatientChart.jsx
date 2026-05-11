@@ -57,6 +57,16 @@ export default function PatientChart() {
   /* Custom tile content */
   const tileContent = ({ date, view }) => {
     if (view !== 'month') return null;
+
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+    if (isWeekend) {
+      return (
+        <div className="cal-tile-content">
+          <span className="cal-dot" style={{ background: '#c0c0c0' }} />
+        </div>
+      );
+    }
+
     const key   = toKey(date);
     const count = APPOINTMENT_COUNTS[key];
     if (!count) return null;

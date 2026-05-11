@@ -48,40 +48,34 @@ export default function Sidebar({ activeTab, onTabChange }) {
   };
 
   return (
-    <aside className="dd-sidebar">
+    <aside className="hl-sidebar">
       {/* Logo */}
-      <a href="/" className="dd-sidebar-logo">
-        <div className="dd-sidebar-logo-icon">
-          <Activity size={18} strokeWidth={2.5} color="#fff" />
-        </div>
-        <span className="dd-sidebar-logo-text">Hospi<span>Link</span></span>
-      </a>
+      <div className="hl-logo">
+        <div className="hl-logo-icon">H</div>
+        <span>HospiLink</span>
+      </div>
 
       {/* Navigation */}
-      <nav className="dd-nav" aria-label="Doctor navigation">
-        <span className="dd-nav-section-label">Main</span>
-
+      <nav className="hl-nav" aria-label="Doctor navigation">
         {NAV_ITEMS.map(({ icon: Icon, label, id, badge }) => (
           <button
             key={id}
             id={`nav-${id}`}
-            className={`dd-nav-item${activeTab === id ? ' active' : ''}`}
+            className={activeTab === id ? 'active' : ''}
             onClick={() => onTabChange(id)}
           >
-            <Icon size={17} strokeWidth={1.9} />
-            {label}
-            {badge !== null && <span className="nav-badge">{badge}</span>}
+            <Icon size={20} />
+            <span>{label}</span>
           </button>
         ))}
 
-        <span className="dd-nav-section-label">Account</span>
-        <button className="dd-nav-item" id="nav-settings" onClick={() => onTabChange('settings')}>
-          <Settings size={17} strokeWidth={1.9} />
-          Settings
+        <button className={activeTab === 'settings' ? 'active' : ''} id="nav-settings" onClick={() => onTabChange('settings')}>
+          <Settings size={20} />
+          <span>Settings</span>
         </button>
-        <button className="dd-nav-item nav-danger" id="nav-logout">
-          <LogOut size={17} strokeWidth={1.9} />
-          Sign Out
+        <button id="nav-logout">
+          <LogOut size={20} />
+          <span>Sign Out</span>
         </button>
       </nav>
 

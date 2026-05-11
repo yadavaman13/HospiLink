@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { ChevronLeft, CheckCircle, AlertCircle, Loader, User, Building2 } from 'lucide-react';
 import { BookingOptionSelector, HospitalSelector, SpecializationSelector } from '../components/BookingOptions';
 import { DoctorSelector } from '../components/DoctorSelector';
 import { SlotSelector } from '../components/SlotSelector';
@@ -169,6 +169,14 @@ export function AppointmentBookingPage() {
     resetState();
   };
 
+  const getStepperState = () => {
+    if (currentStep === STEPS.CONFIRMATION || currentStep === STEPS.REVIEW) return 3;
+    if (currentStep === STEPS.PATIENT_DETAILS) return 2;
+    return 1;
+  };
+
+  const stepperState = getStepperState();
+
   // Render current step
   const renderStep = () => {
     switch (currentStep) {
@@ -178,7 +186,9 @@ export function AppointmentBookingPage() {
       case STEPS.BY_HOSPITAL:
         return (
           <div className="booking-step">
-            <h2>Select Hospital</h2>
+            <div className="step-title-box">
+              <h2>Select Hospital</h2>
+            </div>
             <HospitalSelector
               hospitals={hospitals}
               loading={hospitalsLoading}
@@ -191,7 +201,9 @@ export function AppointmentBookingPage() {
       case STEPS.BY_HOSPITAL_SPEC:
         return (
           <div className="booking-step">
-            <h2>Select Specialization</h2>
+            <div className="step-title-box">
+              <h2>Select Specialization</h2>
+            </div>
             <SpecializationSelector
               hospital={selectedHospital}
               onSelect={handleSpecSelect}
@@ -203,7 +215,9 @@ export function AppointmentBookingPage() {
       case STEPS.BY_HOSPITAL_DOCTOR:
         return (
           <div className="booking-step">
-            <h2>Choose Doctor</h2>
+            <div className="step-title-box">
+              <h2>Choose Doctor</h2>
+            </div>
             <DoctorSelector
               doctors={doctors}
               loading={doctorsLoading}
@@ -217,7 +231,9 @@ export function AppointmentBookingPage() {
       case STEPS.BY_SYMPTOMS:
         return (
           <div className="booking-step">
-            <h2>Tell Us Your Symptoms</h2>
+            <div className="step-title-box">
+              <h2>Tell Us Your Symptoms</h2>
+            </div>
             <div className="symptom-input">
               <p className="symptom-hint">
                 Our AI will match you with the best doctors across our hospital network
@@ -243,7 +259,9 @@ export function AppointmentBookingPage() {
       case STEPS.BY_SYMPTOMS_DOCTOR:
         return (
           <div className="booking-step">
-            <h2>Available Doctors (for: {symptoms})</h2>
+            <div className="step-title-box">
+              <h2>Available Doctors (for: {symptoms})</h2>
+            </div>
             <DoctorSelector
               doctors={doctors}
               loading={doctorsLoading}
@@ -257,7 +275,9 @@ export function AppointmentBookingPage() {
       case STEPS.SLOT_SELECT:
         return (
           <div className="booking-step">
-            <h2>Choose Appointment Date & Time</h2>
+            <div className="step-title-box">
+              <h2>Choose Appointment Date & Time</h2>
+            </div>
             <div className="slot-date-input">
               <label>Start searching from:</label>
               <input
@@ -280,7 +300,9 @@ export function AppointmentBookingPage() {
       case STEPS.PATIENT_DETAILS:
         return (
           <div className="booking-step">
-            <h2>Your Details</h2>
+            <div className="step-title-box">
+              <h2>Your Details</h2>
+            </div>
             <PatientDetailsForm onSubmit={handlePatientDetailsSubmit} />
           </div>
         );
@@ -288,35 +310,35 @@ export function AppointmentBookingPage() {
       case STEPS.REVIEW:
         return (
           <div className="booking-step">
-            <h2>Review Your Appointment</h2>
+            <div className="step-title-box">
+              <h2>Review Your Appointment</h2>
+              <p>Please verify all details before submitting</p>
+            </div>
             <div className="review-summary">
               <div className="review-section">
-                <h4>Doctor</h4>
-                <p>
-                  {selectedDoctor?.name || 
-                   `Dr. ${selectedDoctor?.profile?.firstName} ${selectedDoctor?.profile?.lastName}`}
-                </p>
-                <small>{selectedDoctor?.specialization || selectedDoctor?.profile?.specialization}</small>
+                <User size={20} />
+                <div style={{ width: '100%' }}>
+                  <h4>Personal Information</h4>
+                  <div className="review-details">
+                    <div className="r-detail"><span className="r-label">Age:</span><span className="r-value">{patientDetails?.age}</span></div>
+                    <div className="r-detail"><span className="r-label">Gender:</span><span className="r-value">{patientDetails?.gender}</span></div>
+                    <div className="r-detail"><span className="r-label">Phone:</span><span className="r-value">{patientDetails?.phone || 'N/A'}</span></div>
+                  </div>
+                </div>
               </div>
 
               <div className="review-section">
-                <h4>Hospital</h4>
-                <p>{selectedHospital?.name || selectedDoctor?.hospitalName || 'Not specified'}</p>
-              </div>
-
-              <div className="review-section">
-                <h4>Appointment</h4>
-                <p>{new Date(selectedSlot?.date).toLocaleDateString()} at {selectedSlot?.slot}</p>
-              </div>
-
-              <div className="review-section">
-                <h4>Your Information</h4>
-                <p>Age: {patientDetails?.age}, Gender: {patientDetails?.gender}</p>
-              </div>
-
-              <div className="review-section">
-                <h4>Reason for Visit</h4>
-                <p>{patientDetails?.reason}</p>
+                <Building2 size={20} />
+                <div style={{ width: '100%' }}>
+                  <h4>Appointment Details</h4>
+                  <div className="review-details">
+                    <div className="r-detail"><span className="r-label">Doctor:</span><span className="r-value">{selectedDoctor?.name || `Dr. ${selectedDoctor?.profile?.firstName} ${selectedDoctor?.profile?.lastName}`}</span></div>
+                    <div className="r-detail"><span className="r-label">Hospital:</span><span className="r-value">{selectedHospital?.name || selectedDoctor?.hospitalName || 'Not specified'}</span></div>
+                    <div className="r-detail"><span className="r-label">Date:</span><span className="r-value">{new Date(selectedSlot?.date).toLocaleDateString()}</span></div>
+                    <div className="r-detail"><span className="r-label">Time:</span><span className="r-value">{selectedSlot?.slot}</span></div>
+                    <div className="r-detail" style={{ gridColumn: '1 / -1' }}><span className="r-label">Reason:</span><span className="r-value">{patientDetails?.reason}</span></div>
+                  </div>
+                </div>
               </div>
 
               {bookingError && (
@@ -354,7 +376,7 @@ export function AppointmentBookingPage() {
           <div className="booking-step">
             <div className="confirmation-card">
               <div className="confirmation-icon">
-                <CheckCircle size={64} color="var(--primary)" fill="var(--primary)" />
+                <CheckCircle size={80} strokeWidth={1.5} />
               </div>
               <h2>Appointment Confirmed!</h2>
               <p>Your appointment has been successfully booked</p>
@@ -384,7 +406,7 @@ export function AppointmentBookingPage() {
                 <button onClick={handleStartOver} className="btn-primary btn-primary-lg">
                   Book Another Appointment
                 </button>
-                <a href="/patient/dashboard" className="btn-outline">
+                <a href="/patient/dashboard" className="btn-secondary">
                   Go to Dashboard
                 </a>
               </div>
@@ -400,20 +422,38 @@ export function AppointmentBookingPage() {
   return (
     <div className="appointment-booking-page">
       <div className="booking-container">
+        
+        {currentStep !== STEPS.CONFIRMATION && (
+          <div className="booking-page-title">
+             <h1>Book Your <span>Appointment</span></h1>
+             <p>Complete the form in 3 easy steps</p>
+          </div>
+        )}
+
         {/* Header with back button */}
         {currentStep !== STEPS.OPTION && currentStep !== STEPS.CONFIRMATION && (
           <div className="booking-header">
             <button onClick={handleGoBack} className="back-btn" aria-label="Go back">
-              <ChevronLeft size={20} />
+              <ChevronLeft size={24} />
             </button>
-            <h1>Book Appointment</h1>
           </div>
         )}
 
         {/* Progress indicator */}
         {currentStep !== STEPS.OPTION && currentStep !== STEPS.CONFIRMATION && (
           <div className="booking-progress">
-            {/* Simple progress indicator */}
+             <div className={`progress-step ${stepperState >= 1 ? 'active' : ''} ${stepperState > 1 ? 'completed' : ''}`}>
+                <div className="step-icon"><Building2 size={24} /></div>
+                <div className="step-label">Appointment Info</div>
+             </div>
+             <div className={`progress-step ${stepperState >= 2 ? 'active' : ''} ${stepperState > 2 ? 'completed' : ''}`}>
+                <div className="step-icon"><User size={24} /></div>
+                <div className="step-label">Personal Details</div>
+             </div>
+             <div className={`progress-step ${stepperState >= 3 ? 'active' : ''}`}>
+                <div className="step-icon"><CheckCircle size={24} /></div>
+                <div className="step-label">Review & Submit</div>
+             </div>
           </div>
         )}
 

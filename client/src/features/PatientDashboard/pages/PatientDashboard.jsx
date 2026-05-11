@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Plus, Clock, MapPin, AlertCircle, Check } from 'lucide-react';
+import { 
+  LayoutDashboard, Heart, Calendar, ClipboardList, Clock,
+  MapPin, User, CheckCircle, AlertCircle, Plus
+} from 'lucide-react';
 import '../styles/patient-dashboard.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
@@ -64,183 +67,182 @@ export function PatientDashboard() {
   });
 
   return (
-    <div className="patient-dashboard">
-      <div className="dashboard-container">
-        {/* Header */}
-        <div className="dashboard-header">
-          <div>
-            <h1>My Appointments</h1>
-            <p>Manage and track all your healthcare appointments</p>
+    <div className="hl-dashboard">
+      <div className="hl-app-wrapper">
+        {/* Left Sidebar */}
+        <aside className="hl-sidebar">
+          <div className="hl-logo">
+            <div className="hl-logo-icon">H</div>
+            <span>HospiLink</span>
           </div>
-          <Link to="/booking" className="btn-primary btn-primary-lg">
-            <Plus size={18} />
-            Book Appointment
-          </Link>
-        </div>
+          <nav className="hl-nav">
+            <button className="active"><LayoutDashboard size={20} /> <span>Dashboard</span></button>
+            <button><Calendar size={20} /> <span>Appointments</span></button>
+            <button><ClipboardList size={20} /> <span>Records</span></button>
+            <button><User size={20} /> <span>Profile</span></button>
+          </nav>
+        </aside>
 
-        {/* Stats */}
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-icon upcoming">
-              <Calendar size={24} />
-            </div>
-            <div className="stat-content">
-              <div className="stat-value">{appointments.filter(a => isUpcoming(a.appointmentDate)).length}</div>
-              <div className="stat-label">Upcoming</div>
-            </div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon completed">
-              <Check size={24} />
-            </div>
-            <div className="stat-content">
-              <div className="stat-value">{appointments.filter(a => !isUpcoming(a.appointmentDate)).length}</div>
-              <div className="stat-label">Completed</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="appointment-tabs">
-          <button
-            onClick={() => setActiveTab('upcoming')}
-            className={`tab-btn ${activeTab === 'upcoming' ? 'active' : ''}`}
-          >
-            Upcoming Appointments
-          </button>
-          <button
-            onClick={() => setActiveTab('past')}
-            className={`tab-btn ${activeTab === 'past' ? 'active' : ''}`}
-          >
-            Past Appointments
-          </button>
-        </div>
-
-        {/* Content */}
-        {loading ? (
-          <div className="appointments-skeleton">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="appointment-card-skeleton">
-                <div className="skeleton-line"></div>
-                <div className="skeleton-line short"></div>
+        {/* Main Area */}
+        <main className="hl-main">
+          {/* Header */}
+          <header className="hl-header">
+            <div className="hl-breadcrumb">Patient Dashboard</div>
+            <div className="hl-header-actions">
+              <div className="header-user">
+                <div className="header-user-avatar">P</div>
+                <div className="header-user-info">
+                  <span className="name">Patient Profile</span>
+                </div>
               </div>
-            ))}
-          </div>
-        ) : error ? (
-          <div className="alert-error">
-            <AlertCircle size={20} />
-            <div>
-              <strong>Error</strong>
-              <p>{error}</p>
             </div>
-          </div>
-        ) : filteredAppointments.length === 0 ? (
-          <div className="empty-state">
-            <Calendar size={48} strokeWidth={1.5} />
-            <h3>No {activeTab} appointments</h3>
-            <p>
-              {activeTab === 'upcoming'
-                ? "You don't have any upcoming appointments. Book one now!"
-                : 'No past appointments to show yet'}
-            </p>
-            {activeTab === 'upcoming' && (
+          </header>
+
+          {/* Content Wrapper */}
+          <div className="hl-content-main">
+            
+            <div className="hl-welcome">
+              <div>
+                <h1>My Appointments</h1>
+                <p>Manage and track all your healthcare appointments</p>
+              </div>
               <Link to="/booking" className="btn-primary">
-                Book Appointment
+                <Plus size={18} /> Book Appointment
               </Link>
-            )}
-          </div>
-        ) : (
-          <div className="appointments-list">
-            {filteredAppointments.map((appointment) => (
-              <div key={appointment._id} className="appointment-card">
-                <div className="appointment-card-header">
-                  <div className="appointment-doctor">
-                    <div className="doctor-avatar">
-                      {appointment.doctorId?.profile?.firstName?.[0]}
-                      {appointment.doctorId?.profile?.lastName?.[0]}
-                    </div>
-                    <div>
-                      <h4>Dr. {appointment.doctorId?.profile?.firstName} {appointment.doctorId?.profile?.lastName}</h4>
-                      <p>{appointment.doctorId?.profile?.specialization}</p>
-                    </div>
-                  </div>
-                  {appointment.priority && (
-                    <div className={`priority-badge priority-${appointment.priority?.level}`}>
-                      {appointment.priority?.level?.toUpperCase()}
-                    </div>
-                  )}
+            </div>
+
+            {/* Tabs */}
+            <div className="hl-tabs">
+              <button
+                onClick={() => setActiveTab('upcoming')}
+                className={`hl-tab-btn ${activeTab === 'upcoming' ? 'active' : ''}`}
+              >
+                Upcoming Appointments
+              </button>
+              <button
+                onClick={() => setActiveTab('past')}
+                className={`hl-tab-btn ${activeTab === 'past' ? 'active' : ''}`}
+              >
+                Past Appointments
+              </button>
+            </div>
+
+            {/* Content */}
+            {loading ? (
+              <div className="appointments-skeleton">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="appointment-card-skeleton"></div>
+                ))}
+              </div>
+            ) : error ? (
+              <div className="alert-error" style={{ display: 'flex', gap: '12px', background: '#fee2e2', padding: '16px', borderRadius: '8px', color: '#dc2626' }}>
+                <AlertCircle size={20} />
+                <div>
+                  <strong>Error</strong>
+                  <p style={{ margin: 0 }}>{error}</p>
                 </div>
-
-                <div className="appointment-details">
-                  <div className="detail-item">
-                    <Calendar size={16} />
-                    <div>
-                      <span className="detail-label">Date</span>
-                      <span className="detail-value">{formatDate(appointment.appointmentDate)}</span>
-                    </div>
-                  </div>
-
-                  <div className="detail-item">
-                    <Clock size={16} />
-                    <div>
-                      <span className="detail-label">Time</span>
-                      <span className="detail-value">{formatTime(appointment.timeSlot)}</span>
-                    </div>
-                  </div>
-
-                  <div className="detail-item">
-                    <MapPin size={16} />
-                    <div>
-                      <span className="detail-label">Hospital</span>
-                      <span className="detail-value">{appointment.hospitalId?.name}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {appointment.reason && (
-                  <div className="appointment-reason">
-                    <span className="reason-label">Reason:</span>
-                    <p>{appointment.reason}</p>
-                  </div>
+              </div>
+            ) : filteredAppointments.length === 0 ? (
+              <div className="hl-empty">
+                <Calendar size={64} strokeWidth={1.5} />
+                <h3>No {activeTab} appointments</h3>
+                <p>
+                  {activeTab === 'upcoming'
+                    ? "You don't have any upcoming appointments. Book one now!"
+                    : 'No past appointments to show yet'}
+                </p>
+                {activeTab === 'upcoming' && (
+                  <Link to="/booking" className="btn-primary">
+                    Book Appointment
+                  </Link>
                 )}
-
-                {appointment.priority && appointment.priority.reasoning && (
-                  <div className="appointment-ai-analysis">
-                    <span className="analysis-label">AI Priority Analysis:</span>
-                    <p>{appointment.priority.reasoning}</p>
-                    {appointment.priority.riskFactors?.length > 0 && (
-                      <div className="risk-factors">
-                        <span className="risk-label">Risk Factors:</span>
-                        <div className="risk-tags">
-                          {appointment.priority.riskFactors.map((factor, idx) => (
-                            <span key={idx} className="risk-tag">{factor}</span>
-                          ))}
+              </div>
+            ) : (
+              <div className="hl-section">
+                {filteredAppointments.map((appointment) => (
+                  <div key={appointment._id} className="hl-apt-item">
+                    <div className="hl-apt-header">
+                      <div className="hl-doctor-info">
+                        <div className="hl-doctor-avatar">
+                          {appointment.doctorId?.profile?.firstName?.[0]}
+                          {appointment.doctorId?.profile?.lastName?.[0]}
+                        </div>
+                        <div className="hl-doctor-details">
+                          <h4>Dr. {appointment.doctorId?.profile?.firstName} {appointment.doctorId?.profile?.lastName}</h4>
+                          <p>{appointment.doctorId?.profile?.specialization}</p>
                         </div>
                       </div>
+                      {appointment.priority && (
+                        <div className={`priority-badge priority-${appointment.priority?.level}`}>
+                          {appointment.priority?.level?.toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="hl-apt-meta">
+                      <div className="hl-meta-item">
+                        <Calendar size={16} />
+                        <span>{formatDate(appointment.appointmentDate)}</span>
+                      </div>
+                      <div className="hl-meta-item">
+                        <Clock size={16} />
+                        <span>{formatTime(appointment.timeSlot)}</span>
+                      </div>
+                      <div className="hl-meta-item">
+                        <MapPin size={16} />
+                        <span>{appointment.hospitalId?.name}</span>
+                      </div>
+                    </div>
+
+                    {appointment.reason && (
+                      <div className="hl-apt-reason">
+                        <strong>Reason:</strong> {appointment.reason}
+                      </div>
                     )}
+
+                    {appointment.priority && appointment.priority.reasoning && (
+                      <div className="hl-ai-analysis">
+                        <span className="analysis-label">AI Priority Analysis</span>
+                        <p>{appointment.priority.reasoning}</p>
+                        {appointment.priority.riskFactors?.length > 0 && (
+                          <div className="risk-factors">
+                            <span className="analysis-label" style={{ display: 'inline', marginRight: '8px', fontSize: '11px' }}>Risk Factors:</span>
+                            <div className="risk-tags">
+                              {appointment.priority.riskFactors.map((factor, idx) => (
+                                <span key={idx} className="risk-tag">{factor}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="hl-apt-footer">
+                      <div className="hl-apt-status">
+                        <span className={`status-badge status-${appointment.status}`}>
+                          {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                        </span>
+                        <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                          ID: {appointment.appointmentId}
+                        </span>
+                      </div>
+
+                      <div className="hl-apt-actions">
+                        {isUpcoming(appointment.appointmentDate) && (
+                          <>
+                            <button className="btn-secondary">Reschedule</button>
+                            <button className="btn-secondary" style={{ color: 'var(--danger)', borderColor: '#fecaca' }}>Cancel</button>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                )}
-
-                <div className="appointment-status">
-                  <span className={`status-badge status-${appointment.status}`}>
-                    {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
-                  </span>
-                  <span className="appointment-id">ID: {appointment.appointmentId}</span>
-                </div>
-
-                <div className="appointment-actions">
-                  {isUpcoming(appointment.appointmentDate) && (
-                    <>
-                      <button className="btn-secondary">Reschedule</button>
-                      <button className="btn-outline-danger">Cancel</button>
-                    </>
-                  )}
-                  <button className="btn-outline">View Details</button>
-                </div>
+                ))}
               </div>
-            ))}
+            )}
+
           </div>
-        )}
+        </main>
       </div>
     </div>
   );
