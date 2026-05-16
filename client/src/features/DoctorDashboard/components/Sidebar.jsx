@@ -51,7 +51,6 @@ export default function Sidebar({ activeTab, onTabChange }) {
     <aside className="hl-sidebar">
       {/* Logo */}
       <div className="hl-logo">
-        <div className="hl-logo-icon">H</div>
         <span>HospiLink</span>
       </div>
 

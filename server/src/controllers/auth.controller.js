@@ -96,7 +96,8 @@ async function loginUser(req,res){
 
     const user = await userModel.findOne({
         email
-    })
+    }).select('+password');
+    
 
     if(!user){
         return res.status(404).json({

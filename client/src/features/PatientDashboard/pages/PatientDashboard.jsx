@@ -72,7 +72,6 @@ export function PatientDashboard() {
         {/* Left Sidebar */}
         <aside className="hl-sidebar">
           <div className="hl-logo">
-            <div className="hl-logo-icon">H</div>
             <span>HospiLink</span>
           </div>
           <nav className="hl-nav">
