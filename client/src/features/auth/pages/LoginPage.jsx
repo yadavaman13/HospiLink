@@ -73,7 +73,18 @@ export default function LoginPage() {
         setAlert({ type: 'success', msg: 'Logged in successfully! Redirecting…' });
         // Store token if needed
         if (data.token) localStorage.setItem('token', data.token);
-        setTimeout(() => navigate('/patient/dashboard'), 1000);
+        if (data.user?.role) localStorage.setItem('role', data.user.role);
+
+        const roleRedirects = {
+          super_admin: '/super-admin/dashboard',
+          hospital_admin: '/doctor/dashboard',
+          doctor: '/doctor/dashboard',
+          staff: '/doctor/dashboard',
+          patient: '/patient/dashboard',
+        };
+
+        const nextPath = roleRedirects[data.user?.role] || '/patient/dashboard';
+        setTimeout(() => navigate(nextPath), 1000);
       }
     } catch {
       setAlert({ type: 'error', msg: 'Unable to connect to the server. Please try again.' });
