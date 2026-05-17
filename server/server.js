@@ -1,18 +1,11 @@
-require('dotenv').config();
-const app = require('./src/app')
-const connectDB = require('./src/config/db');
-const bootstrapSuperAdmin = require('./src/scripts/bootstrapSuperAdmin');
+import dotenv from 'dotenv';
+import app from './src/app.js';
+import connectDB from './src/config/db.js';
 
-async function startServer() {
-    await connectDB();
-    await bootstrapSuperAdmin();
+dotenv.config();
 
-    app.listen(3000,()=>{
-        console.log('Server is running')
-    })
-}
+await connectDB();
 
-startServer().catch((err) => {
-    console.error('Failed to start server:', err);
-    process.exit(1);
+app.listen(3000, () => {
+    console.log('Server is running');
 });

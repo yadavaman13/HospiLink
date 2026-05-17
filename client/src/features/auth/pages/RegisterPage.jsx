@@ -61,6 +61,44 @@ const INITIAL_FORM = {
   address: '',
 };
 
+/*
+  Field component moved out of RegisterPage to avoid remounting and
+  losing cursor focus when typing. It receives `form`, `errors`, and
+  `onChange` as props to remain a pure presentational component.
+*/
+export function Field({ id, label, name, type = 'text', placeholder, icon: Icon, required: req, extra, form, errors, onChange }) {
+  return (
+    <div className="auth-field">
+      <label className="auth-label" htmlFor={id}>
+        {label} {req && <span className="required">*</span>}
+      </label>
+      <div className="auth-input-wrap">
+        {Icon && (
+          <span className="auth-input-icon">
+            <Icon size={15} strokeWidth={2} />
+          </span>
+        )}
+        <input
+          id={id}
+          name={name}
+          type={type}
+          className={`auth-input${!Icon ? ' auth-input-no-icon' : ''}${errors?.[name] ? ' has-error' : ''}`}
+          placeholder={placeholder}
+          value={form[name]}
+          onChange={onChange}
+          autoComplete="off"
+        />
+        {extra}
+      </div>
+      {errors?.[name] && (
+        <span className="auth-field-error">
+          <AlertCircle size={12} /> {errors[name]}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export default function RegisterPage() {
   const navigate = useNavigate();
 
@@ -137,37 +175,7 @@ export default function RegisterPage() {
     }
   };
 
-  /* Helpers */
-  const Field = ({ id, label, name, type = 'text', placeholder, icon: Icon, required: req, extra }) => (
-    <div className="auth-field">
-      <label className="auth-label" htmlFor={id}>
-        {label} {req && <span className="required">*</span>}
-      </label>
-      <div className="auth-input-wrap">
-        {Icon && (
-          <span className="auth-input-icon">
-            <Icon size={15} strokeWidth={2} />
-          </span>
-        )}
-        <input
-          id={id}
-          name={name}
-          type={type}
-          className={`auth-input${!Icon ? ' auth-input-no-icon' : ''}${errors[name] ? ' has-error' : ''}`}
-          placeholder={placeholder}
-          value={form[name]}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-        {extra}
-      </div>
-      {errors[name] && (
-        <span className="auth-field-error">
-          <AlertCircle size={12} /> {errors[name]}
-        </span>
-      )}
-    </div>
-  );
+  
 
   return (
     <div className="auth-page">
@@ -235,10 +243,12 @@ export default function RegisterPage() {
               <Field
                 id="reg-firstname" label="First Name" name="firstName"
                 icon={User} placeholder="John" required
+                form={form} errors={errors} onChange={handleChange}
               />
               <Field
                 id="reg-lastname" label="Last Name" name="lastName"
                 icon={User} placeholder="Doe" required
+                form={form} errors={errors} onChange={handleChange}
               />
             </div>
 
@@ -246,6 +256,7 @@ export default function RegisterPage() {
               <Field
                 id="reg-phone" label="Phone" name="phone"
                 icon={Phone} placeholder="+91 9876543210" required
+                form={form} errors={errors} onChange={handleChange}
               />
               {/* Gender select */}
               <div className="auth-field">
@@ -277,6 +288,7 @@ export default function RegisterPage() {
               <Field
                 id="reg-age" label="Age" name="age" type="number"
                 placeholder="28"
+                form={form} errors={errors} onChange={handleChange}
               />
               {/* Blood group select */}
               <div className="auth-field">
@@ -325,6 +337,7 @@ export default function RegisterPage() {
             <Field
               id="reg-email" label="Email Address" name="email" type="email"
               icon={Mail} placeholder="you@example.com" required
+              form={form} errors={errors} onChange={handleChange}
             />
 
             {/* Password */}

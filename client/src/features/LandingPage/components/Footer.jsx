@@ -31,7 +31,7 @@ export function Footer() {
               <li><Link to="/login">Patient Login</Link></li>
               <li><Link to="/login">Doctor Login</Link></li>
               <li><Link to="/login">Admin Login</Link></li>
-              <li><Link to="/register">Register Hospital</Link></li>
+              <li><Link to="/hospital/register">Register Hospital</Link></li>
             </ul>
           </div>
           <div>

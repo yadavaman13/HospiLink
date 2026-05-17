@@ -77,7 +77,7 @@ export default function LoginPage() {
 
         const roleRedirects = {
           super_admin: '/super-admin/dashboard',
-          hospital_admin: '/doctor/dashboard',
+          hospital_admin: '/hospital/dashboard',
           doctor: '/doctor/dashboard',
           staff: '/doctor/dashboard',
           patient: '/patient/dashboard',
@@ -139,6 +139,10 @@ export default function LoginPage() {
             <p className="auth-form-subtitle">
               Don't have an account?{' '}
               <Link to="/register">Create one for free</Link>
+            </p>
+            <p className="auth-form-subtitle" style={{ marginTop: 8 }}>
+              Register a hospital?{' '}
+              <Link to="/hospital/register">Start here</Link>
             </p>
           </div>
 

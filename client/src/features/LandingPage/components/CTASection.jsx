@@ -13,7 +13,7 @@ export function CTASection() {
           QR-based patient management. Setup takes less than a day.
         </p>
         <div className="cta-actions">
-          <Link to="/register" className="btn-primary btn-primary-lg" id="cta-register-btn">
+          <Link to="/hospital/register" className="btn-primary btn-primary-lg" id="cta-register-btn">
             Register Your Hospital <ArrowRight size={16} />
           </Link>
           <Link to="/login" className="btn-outline" id="cta-login-btn">
